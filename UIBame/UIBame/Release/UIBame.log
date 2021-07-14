@@ -1,0 +1,10 @@
+﻿  CommonFunction.cpp
+D:\Download\Compressed\19127294_19127363_19127100_19127083\UIBame\UIBame\CommonFunction.cpp(117,23): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+D:\Download\Compressed\19127294_19127363_19127100_19127083\UIBame\UIBame\main.cpp(102,4): warning C4102: 'End': unreferenced label
+  TextObject.cpp
+  Generating code
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 342 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  UIBame.vcxproj -> D:\Download\Compressed\19127294_19127363_19127100_19127083\UIBame\Release\UIBame.exe
