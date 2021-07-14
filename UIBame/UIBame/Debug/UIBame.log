@@ -1,3 +1,8 @@
-﻿  main.cpp
-C:\Users\thien\OneDrive - VNU-HCMUS\19127294_19127363_19127100_19127083\UIBame\UIBame\main.cpp(102,4): warning C4102: 'End': unreferenced label
-  UIBame.vcxproj -> C:\Users\thien\OneDrive - VNU-HCMUS\19127294_19127363_19127100_19127083\UIBame\Debug\UIBame.exe
+﻿  CommonFunction.cpp
+D:\Download\Compressed\19127294_19127363_19127100_19127083\HDH_ChildrenManager\UIBame\UIBame\CommonFunction.cpp(121,23): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+D:\Download\Compressed\19127294_19127363_19127100_19127083\HDH_ChildrenManager\UIBame\UIBame\main.cpp(102,4): warning C4102: 'End': unreferenced label
+  TextObject.cpp
+  Generating Code...
+  LINK : D:\Download\Compressed\19127294_19127363_19127100_19127083\HDH_ChildrenManager\UIBame\Debug\UIBame.exe not found or not built by the last incremental link; performing full link
+  UIBame.vcxproj -> D:\Download\Compressed\19127294_19127363_19127100_19127083\HDH_ChildrenManager\UIBame\Debug\UIBame.exe

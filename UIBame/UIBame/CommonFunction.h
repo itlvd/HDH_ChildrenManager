@@ -30,7 +30,7 @@ static SDL_Event g_even;
 static SDL_Surface* menu_b;
 
 
-//Menu
+//Menu constant
 const string font_local = "./font/menu.ttf";
 const int kMenu = 3;
 const int x_menu_pixel = 500;
@@ -53,13 +53,12 @@ namespace SDLCommonFunction {
 	int showImage(SDL_Surface* des, int i);
 	int showEdit(SDL_Surface* des);
 	int Edit(SDL_Surface* des, int i);
-	string handleInput(SDL_Surface* des);
 	int update(SDL_Surface* des);
 	int isWaiting(SDL_Surface* des);
 	// Check collision
 	void checkFlag(int& flag);
 	void setFlag(int value);
-
+	// Input From Keyboard
 	void PrintModifiers(SDLMod mod);
 	string PrintKeyInfo(SDL_KeyboardEvent* key);
 

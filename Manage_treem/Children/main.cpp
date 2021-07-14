@@ -16,8 +16,8 @@
 
 using namespace std;
 
-const string TREEM = "treem";
-const string BAME = "bame";
+const string TREEM = "treem";           //password children
+const string BAME = "bame";				//password parrent
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "advapi32.lib")
@@ -136,7 +136,7 @@ struct RegulationTime
 };
 
 
-Time parstToTime(string token) {
+Time parstToTime(string token) {				//parst string to Time 
 	int posColon = token.find(":");
 	string h = token.substr(1, posColon);
 	string m = token.substr(posColon + 1);
@@ -147,25 +147,26 @@ Time parstToTime(string token) {
 	return t;
 }
 
+// Get Time now, return Time datatypes
 Time getTime() {
 	Time t;
 	time_t now = time(0);
 	tm* ltm = localtime(&now);
-	//t.hour = 1 + ltm->tm_hour;
-	//t.minute = 1 + ltm->tm_min;
 	t.hour = ltm->tm_hour;
 	t.minute = ltm->tm_min;
 	t.second = ltm->tm_sec;
 	return t;
 }
 
-int minTime(int& a, int& b, int& c) {
+// compare time return min time
+int minTime(int& a, int& b, int& c) { 
 	int m = a;
 	if (m > b) m = b;
 	if (m > c) m = c;
 	return m;
 }
 
+//Tach thong tin tu chuoi
 RegulationTime tokenize(string s) {
 	RegulationTime t;
 	string delimiter = " ";
@@ -193,10 +194,9 @@ RegulationTime tokenize(string s) {
 			t.sumTime = stoi(token);
 		}
 
-		// std::cout << token << std::endl;
 		s.erase(0, pos + delimiter.length());
 	}
-	// std::cout << s << std::endl;
+
 	if (s[0] == 'F') {
 		t.from = parstToTime(s);
 	}
@@ -220,7 +220,7 @@ RegulationTime tokenize(string s) {
 	return t;
 }
 
-
+// Thoi gian quy dinh:
 class Regulation
 {
 private:
@@ -247,7 +247,6 @@ public:
 	// method:
 
 	bool hasUpdate() {
-		//times.clear();
 		vector<RegulationTime> tempTimes;
 		fstream fi;
 		string s;
@@ -376,10 +375,6 @@ public:
 		remainFile = remainFileName;
 	}
 
-	// Destructor:
-	
-
-
 
 public: //method
 	int remainDuration() {
@@ -396,12 +391,8 @@ public: //method
 		return saveTime;
 	}
 
-	/*void update() {
-		Saved(saveFile, remainFile);
-	}*/
-
 	void saveData(Time time, int& d, int& s) {
-		nextStart = time;
+		nextStart = time;	// thoi duoc su dung ke tiep
 		duration = d;
 		sum = s;
 
@@ -424,14 +415,13 @@ public: //method
 };
 
 
-Regulation gRegu = Regulation("data.txt");
+Regulation gRegu = Regulation("data.txt");						//bien toan cuc luu thong tin quy dinh
 Saved gSaved = Saved("savedStart.txt", "saveRemain.txt");
 
 Time currentTime;
-//Time savedTime;
 Time gNextTime;
-RegulationTime gReguTimeNow;
-int gIndexRegu;
+RegulationTime gReguTimeNow;									// khung gio dang duoc phep su dung hien tai
+int gIndexRegu;													// thu tu de lay regu
 
 
 
@@ -477,15 +467,7 @@ public:
 		else {
 			remainDurationTime = min(remainUntilEnd, reguTime.duration);
 		}
-		/*if (reguTime.duration == 0) {
-			remainDurationTime = (reguTime.to.hour*60 + reguTime.to.minute) - (startTime.hour*60 + startTime.minute);
-		}
-		else {
-			if ((reguTime.to.hour * 60 + reguTime.to.minute) - (startTime.hour * 60 + startTime.minute) < rd) {
-				remainDurationTime = (reguTime.to.hour * 60 + reguTime.to.minute) - (startTime.hour * 60 + startTime.minute);
-			}
-			else remainDurationTime = rd;
-		}*/
+		
 
 		if (reguTime.sumTime == 0) {
 			remainSumTime = (reguTime.to.hour * 60 + reguTime.to.minute) - (reguTime.from.hour * 60 + reguTime.from.minute);
@@ -595,6 +577,12 @@ public:
 
 Children tre;
 
+
+// Input password children or parent. 
+// Return 1 if there is parent, 
+//        0 if pass children is correct but don't during access time
+//       -1 if pass children is correct and can access operating system
+//       -2 Else
 int inputPassword()
 {
 	currentTime = getTime();
@@ -628,6 +616,11 @@ int inputPassword()
 
 }
 
+
+//Check Update data. 
+// Return 0 if no update
+//		  1 if has update, but expired time
+//		 -1 if has update, children can continue
 int checkUpdate() {
 	if (!gRegu.hasUpdate()) return 0;	// khong co update
 	
@@ -644,7 +637,7 @@ int checkUpdate() {
 
 
 
-
+//Count 15s
 void count15second(Time &lastTime, bool isOver) {
 	currentTime = getTime();
 	if (currentTime - lastTime >= 15) {
@@ -655,6 +648,7 @@ void count15second(Time &lastTime, bool isOver) {
 	return;
 }
 
+//Check password parent
 void inputSOS(bool &ok) {
 	string s;
 	cout << "pass: ";
@@ -664,21 +658,10 @@ void inputSOS(bool &ok) {
 	return;
 }
 
-void foo()
-{
-	// do stuff...
-	currentTime = getTime();
-}
-
 string parent;
-void bar()
-{
-	// do stuff...
-	system("cls");
-	cout << "pass: ";
-	getline(cin, parent);
-}
 
+
+//turn off screen after second
 void turnoffsreen(int second) {
 	string s = "nircmd.exe monitor off";
 	string on = "nircmd.exe monitor on";
@@ -692,17 +675,12 @@ void turnoffsreen(int second) {
 
 	while (getTime() - startTime < second) {
 		system(s.c_str());
-		//now = time(0);
-		//ltm = localtime(&now);
-		//start = ltm->tm_sec;
-		//cout << start << endl;
 	}
 
 	system(on.c_str());
 
 }
 
-//===============================================Code chua upadte================================
 /*Lấy dir để lưu, hàm trả về string bao gồm thư mục ( ngày tháng ) + tên file(giờ:phút).png*/
 string getDirCapture() {
 	string s;
@@ -712,12 +690,6 @@ string getDirCapture() {
 	string dir = to_string(ltm->tm_year + 1900) + "_" + to_string(ltm->tm_mon + 1) + "_" + to_string(ltm->tm_mday);
 	string filename = to_string(ltm->tm_hour) + "_" + to_string(ltm->tm_min) + ".png";
 
-	//string mkdir = "mkdir history\\" + dir;
-	//system(mkdir.c_str());
-
-	//s = "\".\\history\\" + dir + "\\" + filename + "\"";
-	//s = "C:\\Users\\thien\\OneDrive - VNU - HCMUS\\19127294_19127363_19127100_19127083\\data\\" + filename;
-	//s = "\".\\data\\" + dir + "\\" + filename + "\"";
 
 	string mkdir = "mkdir .\\..\\..\\data\\history";
 	system(mkdir.c_str());
@@ -747,8 +719,6 @@ void captureScreen() {
 	}
 }
 
-
-
 void checkUpdateData() {
 
 	while (true) {
@@ -763,8 +733,7 @@ void checkUpdateData() {
 		else if (updateStatus == -1) {
 			cout << "vua moi update" << endl;
 			cout << "da het han su dung, bye";
-			// shut down
-			//exit(0);
+
 			MySystemShutdown();
 		}
 		else if (updateStatus == 1) {
@@ -781,10 +750,10 @@ void notificate() {
 		
 		currentTime = getTime();
 		if (tre.getRemainDuration() <= 0 && tre.getRemainSum() >= 1) {
-			//log off	
+	
 			turnoffsreen(tre.getInterrupt() * 60);
 			tre.setDuration(gReguTimeNow.duration);
-			//tre.setSum(tre.getRemainSum() + gReguTimeNow.interrupt);
+		
 		}
 
 		if (tre.getRemainSum() == 1)
@@ -824,10 +793,7 @@ void countDown(int& time) {
 
 		cout << "\nPhat 10 phut" << endl;
 		gNextTime = currentTime + 10;
-		/*Time alarm = currentTime + 10;
-		int tempD = -1, tempS = -1;
-		gSaved.saveData(alarm, tempD, tempS);*/
-		//exit(0);
+
 		MySystemShutdown();
 	}
 }
@@ -844,12 +810,6 @@ void inputThread(string Tpass) {
 		}
 	}
 }
-
-
-//void nofitication(const string &title, const string& message) {
-//	MessageBox(NULL, message.c_str(), title.c_str(), MB_OK | MB_ICONQUESTION | MB_SYSTEMMODAL);
-//}
-
 
 
 int main()
@@ -875,7 +835,7 @@ int main()
 			{
 				// parent
 				cout << "parent" << endl;
-				//lastCheck++;
+				
 				break;
 			}
 			case 0:
@@ -890,19 +850,13 @@ int main()
 				thread t2(countDown, ref(timeCountDown));
 				
 				t1.join();
-				//shutdown
 				
-				//t2.join();
-				//if (is)
-				//t2.join();
 				if (isLogin == true) {
 					t2.join();
 					status = 1;
 					lastTime = lastParent = currentTime = getTime();
 				}
-				/*else {
-					MySystemShutdown();
-				}*/
+				
 				break;
 			}
 			case -1:		// nhap dung pass tre em:
@@ -921,101 +875,20 @@ int main()
 
 				MessageBox(NULL, tittle2.c_str(), mess2.c_str(), MB_OK | MB_ICONQUESTION | MB_SYSTEMMODAL);
 
-
-
-				//while (tre.getRemainDuration() > 0 && tre.getRemainSum() > 0) {
-				//bool isOff = false;
 				string se = getDirCapture();
-
 
 				thread check(checkUpdateData);
 				thread capture(captureScreen);
-
-				//while (tre.getRemainSum() > 0) {
-					//currentTime = getTime();
-
-
 				thread notify(notificate);
 
 				notify.join();
 				capture.join();
 				check.join();
 
-				
 				//shutdown
 				MySystemShutdown();
 
-				//Sleep(60000);
-
-				//if (tre.getRemainDuration() <= 0) {
-				//	//log off	
-				//	turnoffsreen(tre.getInterrupt() * 60);
-				//	tre.setDuration(gReguTimeNow.duration + gReguTimeNow.interrupt);
-				//	//tre.setSum(tre.getRemainSum() + gReguTimeNow.interrupt);
-				//}
-
-
-
-				//if (currentTime - lastTime >= 1*60) {
-				//	//tre.countDown();
-
-				//	// chup man hinh:						
-				//	
-				//	//captureScreen(se);
-
-				//	
-
-				//	// neu co thay doi:
-
-				//	/*cout << "tre dang dung may" << endl;
-				//	cout << "thoi gian con lai: " << tre.getRemainDuration() << endl;
-				//	cout << "tong thoi gian con lai: " << tre.getRemainSum() << endl;
-				//	cout << endl;*/
-				//	/*int updateStatus = checkUpdate();
-
-				//	if (updateStatus == -1) {
-				//		cout << "vua moi update" << endl;
-				//		cout << "da het han su dung, bye";
-				//		break;
-				//	}
-				//	else if (updateStatus == 1) {
-				//		cout << "thoi gian con lai: " << tre.getRemainDuration() << endl;
-				//		cout << "tong thoi gian con lai: " << tre.getRemainSum() << endl;
-				//	}*/
-
-				//	//if (tre.getRemainSum() == 1)
-				//	//{
-				//	//	cout << "\n1 phut nua tat may" << endl;
-				//	//	// thong bao next time
-				//	//	cout << "\nthoi gian duoc phep su dung bat dau tu: " << gNextTime.hour << ":" << gNextTime.minute << endl;
-				//	//	cout << endl;
-				//	//}
-				//	//Sleep(2000);
-				//	
 				lastTime = currentTime;
-				//}
-			//}
-			/*int d, su;
-			if (tre.getRemainDuration() <= 0) {
-				d = -1;
-			}
-			else {
-				d = tre.getRemainDuration();
-			}
-
-			if (tre.getRemainSum() <= 0) {
-				su = 0;
-			}
-			else {
-				su = tre.getRemainSum();
-			}
-			if (su == 0) {
-				gSaved.saveData(tre.getNextTime(), d, su);
-			}
-			else {
-				gSaved.saveData(currentTime, d, su);
-			}*/
-
 
 			break;
 			}
@@ -1028,10 +901,9 @@ int main()
 				break;
 			}
 		}
-		//Sleep(1000);
+
 		currentTime = getTime();
 		
 	} while (status == 1);
-	//MySystemShutdown();
 	return 0;
 }
