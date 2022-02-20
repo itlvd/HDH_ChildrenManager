@@ -13,7 +13,7 @@ This a tool you can control the children using the computer safer.
 ## Using
 You can read more at ![Document](https://github.com/itlvd/HDH_ChildrenManager/blob/main/Baocao_OS_Process2.pdf)
 
-Contribute:
+## Contribute:
 - Nguyen Huu Tuan.
 - Le Tran Gia Bao.
 - Nguyen Tran Thien Toan.
